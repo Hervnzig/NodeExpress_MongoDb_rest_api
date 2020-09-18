@@ -1,0 +1,20 @@
+{
+  "name": "my-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "detect-file-type": "0.2.8",
+    "express": "^4.17.1",
+    "formidable": "1.2.2",
+    "mongoose": "^5.10.5",
+    "multer": "^1.4.2",
+    "uuid": "7.0.2"
+  }
+}
