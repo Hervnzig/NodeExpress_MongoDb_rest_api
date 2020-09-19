@@ -1,9 +1,10 @@
 const path = require("path");
 const multer = require("multer");
+// const upload = multer();
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "./uploads/");
   },
   filename: (req, file, cb) => {
     let ext = path.extname(file.originalname);
@@ -17,7 +18,7 @@ let upload = multer({
     if (
       file.mimetype == "image/png" ||
       file.mimetype == "image/jpeg" ||
-      file.mimetype == "image/jpb"
+      file.mimetype == "image/jpg"
     ) {
       callback(null, true);
     } else {

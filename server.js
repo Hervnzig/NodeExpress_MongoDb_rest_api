@@ -5,7 +5,11 @@ const { MONGO_URL } = require("./config");
 const http = require("http");
 
 mongoose
-  .connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
   .then(() => {
     console.log("Connected to db");
   })
