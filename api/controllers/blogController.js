@@ -107,5 +107,6 @@ const update = (req, res, next) => {
         message: `error: ${error}`,
       });
     });
+  console.log(updatedBlog);
 };
 module.exports = { create, retrieve, retrieveSingle, remove, update };
