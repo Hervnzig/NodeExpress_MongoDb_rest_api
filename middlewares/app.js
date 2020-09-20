@@ -7,6 +7,10 @@ const blogRoutes = require("../api/routes/blogs");
 // const commentRoutes;
 
 // === ROUTES ===
+app.get("/", (req, res, next) => {
+  res.send("Welcome to my blogs");
+});
+
 app.use("/blogs", blogRoutes);
 
 app.use(morgan("dev"));
