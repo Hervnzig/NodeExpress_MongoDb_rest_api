@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { JWT_KEY } = require("../../config");
 
 const signup = (req, res, next) => {
   User.find({ email: req.body.email })
@@ -48,6 +50,49 @@ const retriveUsers = async (req, res, next) => {
   await res.send("Hi");
 };
 
+const loginUser = (req, res, next) => {
+  User.find({ email: req.body.email })
+    .exec()
+    .then((user) => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          message: "Authentication failed",
+        });
+      }
+      bcrypt.compare(req.body.password, user[0].password, (err, response) => {
+        if (err) {
+          return res.status(401).json({
+            message: "Auth failed",
+          });
+        }
+        if (response) {
+          const token = jwt.sign(
+            {
+              email: user[0].email,
+              userId: user[0]._id,
+            },
+            JWT_KEY,
+            {
+              expiresIn: "1h",
+            }
+          );
+          return res.status(200).json({
+            message: "Auth successful",
+            token: token,
+          });
+        }
+        res.status(401).json({
+          message: "Authentication failed",
+        });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
 const removeUser = async (req, res, next) => {
   const userId = req.params.userId;
   await User.findByIdAndDelete(userId)
@@ -64,4 +109,4 @@ const removeUser = async (req, res, next) => {
     });
 };
 
-module.exports = { signup, retriveUsers, removeUser };
+module.exports = { signup, retriveUsers, loginUser, removeUser };
