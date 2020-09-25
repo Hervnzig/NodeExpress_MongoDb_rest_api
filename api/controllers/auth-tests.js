@@ -1,9 +1,13 @@
-const User = require("../models/user");
+const User = require("../models/user-role-based");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT_KEY } = require("../../config");
 
-const userSignUp = async (userDetails, role, res) => {
+/**
+ * To register the user (ADMIN, SUPER_ADMiN, USER)
+ */
+
+const userRegister = async (userDetails, role, res) => {
   try {
     // validate username
     let usernameNotTaken = await validateUsername(userDetails.username);
@@ -15,7 +19,7 @@ const userSignUp = async (userDetails, role, res) => {
     }
 
     // validate emial
-    let emailNotRegistered = await validateEmail(userDetails.email);
+    let emailNotRegistered = await validateemail(userDetails.email);
     if (!emailNotRegistered) {
       return res.status(500).json({
         message: `Email is already registered`,
@@ -23,7 +27,7 @@ const userSignUp = async (userDetails, role, res) => {
       });
     }
 
-    hashedPassword = await bcrypt.hash(userDetails.password, 12);
+    const hashedPassword = await bcrypt.hash(userDetails.password, 12);
 
     const newUser = new User({
       ...userDetails,
@@ -31,12 +35,10 @@ const userSignUp = async (userDetails, role, res) => {
       role: role,
     });
 
-    await newUser.save().then((result) => {
-      console.log(result);
-      res.status(201).json({
-        message: "User created",
-        result: result,
-      });
+    await newUser.save();
+    return res.status(201).json({
+      message: "User created",
+      success: true,
     });
   } catch (error) {
     return res.status(500).json({
@@ -47,13 +49,13 @@ const userSignUp = async (userDetails, role, res) => {
 };
 
 const userLogin = async (userCredentials, role, res) => {
-  let { email, password } = userCredentials;
+  let { username, password } = userCredentials;
 
   // check if the username existst in db
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ username });
   if (!user) {
     return res.status(404).json({
-      message: "Email is not found. Invalid login credentials",
+      message: "Username is not found. Invalid login credentials",
       success: false,
     });
   }
@@ -65,12 +67,7 @@ const userLogin = async (userCredentials, role, res) => {
     });
   }
 
-  if (user.email != email) {
-    return res.status(401).json({
-      message: "Authentication was bum!",
-    });
-  }
-
+  // Password check
   let isMatch = await bcrypt.compare(password, user.password);
   if (isMatch) {
     let token = jwt.sign(
@@ -92,9 +89,9 @@ const userLogin = async (userCredentials, role, res) => {
     };
 
     return res.status(200).json({
+      ...result,
       message: "Horray you're logged in now :)",
       success: true,
-      ...result,
     });
   } else {
     return res.status(403).json({
@@ -104,37 +101,16 @@ const userLogin = async (userCredentials, role, res) => {
   }
 };
 
-const retriveUsers = async (req, res, next) => {
-  await res.send("Hi");
-};
-
-const removeUser = async (req, res, next) => {
-  const userId = req.params.userId;
-  await User.findByIdAndDelete(userId)
-    .exec()
-    .then((result) => {
-      res.status(200).json({
-        message: "User deleted",
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
-};
-
-// validations
 const validateUsername = async (username) => {
   let user = await User.findOne({ username });
 
   return user ? false : true;
 };
 
-const validateEmail = async (email) => {
+const validateemail = async (email) => {
   let user = await User.findOne({ email });
 
   return user ? false : true;
 };
 
-module.exports = { userSignUp, userLogin, retriveUsers, removeUser };
+module.exports = { userRegister, userLogin };
