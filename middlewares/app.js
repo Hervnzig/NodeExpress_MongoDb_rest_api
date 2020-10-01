@@ -2,16 +2,25 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 
+const userRoutes = require("../api/routes/users");
 const blogRoutes = require("../api/routes/blogs");
-// const userRoutes;
-// const commentRoutes;
+const commentRoutes = require("../api/routes/comments");
+
+app.use(express.json());
+app.use(morgan("dev"));
 
 // === ROUTES ===
-app.use("/blogs", blogRoutes);
+// app.get("/", (req, res, next) => {
+//   res.send("Welcome to my blogs");
+// });
 
-app.use(morgan("dev"));
+app.use("/user", userRoutes);
+app.use("/blogs", blogRoutes);
+app.use("/blogs", commentRoutes);
+
 app.use("/uploads", express.static("uploads"));
-app.use(express.json());
+
+// =======
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(

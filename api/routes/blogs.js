@@ -2,15 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Blog = require("../models/blog");
 
-// Middlewares
-const BlogController = require("../controllers/blogController");
+// Middlewares and
+const checkAuth = require("../../middlewares/check-auth");
 const upload = require("../../middlewares/validations/upload");
 
-// ROUTE CONTROLLERS
-router.get("/", BlogController.retrieve);
+// Controller for /blogs
+const BlogController = require("../controllers/blogController");
+const CommentController = require("../controllers/commentController");
+
+// Handle incoming requests to /blogs
+router.get("/", BlogController.retrieveWholeBlog);
 router.get("/:blogId", BlogController.retrieveSingle);
-router.post("/", upload.single("image"), BlogController.create);
-router.patch("/:blogId", upload.single("image"), BlogController.update);
-router.delete("/:blogId", BlogController.remove);
+router.post("/", checkAuth, upload.single("image"), BlogController.create);
+router.patch(
+  "/:blogId",
+  checkAuth,
+  upload.single("image"),
+  BlogController.update
+);
+router.delete("/:blogId", checkAuth, BlogController.remove);
 
 module.exports = router;
