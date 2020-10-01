@@ -4,9 +4,7 @@ const morgan = require("morgan");
 
 const userRoutes = require("../api/routes/users");
 const blogRoutes = require("../api/routes/blogs");
-// const commentRoutes;
-
-const userRoleBased = require("../api/routes/auth-test");
+const commentRoutes = require("../api/routes/comments");
 
 app.use(express.json());
 app.use(morgan("dev"));
@@ -18,10 +16,7 @@ app.use(morgan("dev"));
 
 app.use("/user", userRoutes);
 app.use("/blogs", blogRoutes);
-
-/////////
-// app.use("/user-role", userRoleBased); // Testing just for testing
-//////////////
+app.use("/blogs", commentRoutes);
 
 app.use("/uploads", express.static("uploads"));
 

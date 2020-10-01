@@ -8,9 +8,10 @@ const upload = require("../../middlewares/validations/upload");
 
 // Controller for /blogs
 const BlogController = require("../controllers/blogController");
+const CommentController = require("../controllers/commentController");
 
 // Handle incoming requests to /blogs
-router.get("/", BlogController.retrieve);
+router.get("/", BlogController.retrieveWholeBlog);
 router.get("/:blogId", BlogController.retrieveSingle);
 router.post("/", checkAuth, upload.single("image"), BlogController.create);
 router.patch(

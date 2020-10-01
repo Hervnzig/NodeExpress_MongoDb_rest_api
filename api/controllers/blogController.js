@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const Comments = require("../models/comment");
 
 const retrieve = async (req, res, next) => {
   let blogs = await Blog.find()
@@ -28,7 +29,10 @@ const retrieveSingle = async (req, res, next) => {
     .then((doc) => {
       // console.log("### From database: ", doc);
       if (doc) {
-        res.status(200).json(doc);
+        res.status(200).json({
+          blogs: doc,
+          message: "comments",
+        });
       } else {
         res
           .status(404)
@@ -109,4 +113,31 @@ const update = (req, res, next) => {
     });
   console.log(updatedBlog);
 };
-module.exports = { create, retrieve, retrieveSingle, remove, update };
+
+// const retrieveWholeBlog = async (req, res, next) => {
+//   // await Blog.aggregate([
+//   //   {
+//   //     $lookup: {},
+//   //   },
+//   // ]);
+
+//   try {
+//     let jsonArray = {};
+//     jsonArray.blogs = await Blog.find({ _id: req.params.blogId });
+//     jsonArray.comment = await Comments.find({ _id: req.params.blogId });
+
+//     res.status(200).json(jsonArray);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error,
+//     });
+//   }
+// };
+module.exports = {
+  create,
+  retrieve,
+  retrieveSingle,
+  remove,
+  update,
+  retrieveWholeBlog,
+};

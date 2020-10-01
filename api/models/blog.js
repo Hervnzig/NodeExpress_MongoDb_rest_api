@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const blogSchema = mongoose.Schema(
+const { model, Schema } = require("mongoose");
+
+const blogSchema = new Schema(
   {
     title: {
       type: String,
@@ -21,5 +22,7 @@ const blogSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const Blog = mongoose.model("Blog", blogSchema);
+const Blog = model("Blog", blogSchema);
 module.exports = Blog;
+
+// comments: [{ type: Schema.Types.ObjectId, ref: "comments" }],
