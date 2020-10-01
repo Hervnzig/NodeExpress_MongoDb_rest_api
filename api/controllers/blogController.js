@@ -139,5 +139,4 @@ module.exports = {
   retrieveSingle,
   remove,
   update,
-  retrieveWholeBlog,
 };
