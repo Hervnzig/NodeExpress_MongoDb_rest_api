@@ -1,4 +1,4 @@
 .env
 _node_modules
-config.js
+# config.js
 data.json
