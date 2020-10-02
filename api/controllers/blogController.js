@@ -1,6 +1,10 @@
 const Blog = require("../models/blog");
 const Comments = require("../models/comment");
 
+// const multerConfig = require("../../middlewares/validations/multerConfig");
+const cloud = require("../../middlewares/validations/cloudinaryConfig");
+const fs = require("fs");
+
 const retrieve = async (req, res, next) => {
   let blogs = await Blog.find()
     .select("title author content date image")
@@ -45,17 +49,18 @@ const retrieveSingle = async (req, res, next) => {
     });
 };
 
-const create = (req, res, next) => {
-  let blog = new Blog({
+const create = async (req, res, next) => {
+  const result = await cloud.uploads(req.files[0].path);
+
+  let blogPost = {
     title: req.body.title,
     author: req.body.author,
     content: req.body.content,
     date: req.body.date,
-  });
-  if (req.file) {
-    console.log(req.file);
-    blog.image = req.file.path;
-  }
+    image: result.url,
+  };
+
+  const blog = new Blog(blogPost);
   blog
     .save()
     .then((response) => {
@@ -133,6 +138,7 @@ const update = (req, res, next) => {
 //     });
 //   }
 // };
+
 module.exports = {
   create,
   retrieve,
