@@ -1,7 +1,7 @@
 const Blog = require("../models/blog");
 const Comments = require("../models/comment");
 
-// const multerConfig = require("../../middlewares/validations/multerConfig");
+// Middlewares
 const cloud = require("../../middlewares/validations/cloudinaryConfig");
 const fs = require("fs");
 
@@ -28,25 +28,39 @@ const retrieve = async (req, res, next) => {
 };
 const retrieveSingle = async (req, res, next) => {
   const id = req.params.blogId;
-  let blog = await Blog.findById(id)
-    .exec()
-    .then((doc) => {
-      // console.log("### From database: ", doc);
-      if (doc) {
-        res.status(200).json({
-          blogs: doc,
-          message: "comments",
-        });
-      } else {
-        res
-          .status(404)
-          .json({ message: `No valid entry found for id= ${id} ` });
-      }
-    })
-    .catch((err) => {
-      // console.log(err);
-      res.status(500).json({ error: err });
-    });
+  // let blog = await Blog.findById(id)
+  //   .exec()
+  //   .then((doc) => {
+  //     if (doc) {
+  //       const response1 = {
+  //         the_blog: (doc = {
+  //           id: doc._id,
+  //           title: doc.title,
+  //           author: doc.author,
+  //           content: doc.content,
+  //           date: doc.date,
+  //           image: doc.image,
+  //         }),
+
+  //         comments: [],
+  //       };
+  //       res.status(200).json(response1);
+  //     } else {
+  //       res
+  //         .status(404)
+  //         .json({ message: `No valid entry found for id= ${id} ` });
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     // console.log(err);
+  //     res.status(500).json({ error: err.message });
+  //   });
+
+  let blog_w_comments = {};
+  blog_w_comments.blog = await Blog.find({ _id: req.params.blogId });
+  blog_w_comments.comments = await Comments.find({ blogId: req.params.blogId });
+
+  res.status(200).json(blog_w_comments);
 };
 
 const create = async (req, res, next) => {
@@ -119,24 +133,31 @@ const update = (req, res, next) => {
   console.log(updatedBlog);
 };
 
-// const retrieveWholeBlog = async (req, res, next) => {
-//   // await Blog.aggregate([
-//   //   {
-//   //     $lookup: {},
-//   //   },
-//   // ]);
+// const retrieveSingleComment = async (req, res, next) => {
+//   const comments = [];
+//   const id = req.params.blogId;
+//   let commentArray = await Comments.findById(id);
 
-//   try {
-//     let jsonArray = {};
-//     jsonArray.blogs = await Blog.find({ _id: req.params.blogId });
-//     jsonArray.comment = await Comments.find({ _id: req.params.blogId });
-
-//     res.status(200).json(jsonArray);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: error,
+//   let blog = await Blog.findById(id)
+//     .exec()
+//     .then((doc) => {
+//       // console.log("### From database: ", doc);
+//       if (doc) {
+//         console.log(commentArray);
+//         res.status(200).json({
+//           blogs: doc,
+//           comments: commentArray,
+//         });
+//       } else {
+//         res
+//           .status(404)
+//           .json({ message: `No valid entry found for id= ${id} ` });
+//       }
+//     })
+//     .catch((err) => {
+//       // console.log(err);
+//       res.status(500).json({ error: err });
 //     });
-//   }
 // };
 
 module.exports = {
