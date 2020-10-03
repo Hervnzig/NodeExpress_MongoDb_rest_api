@@ -37,4 +37,25 @@ const postComment = async (req, res) => {
   });
 };
 
-module.exports = { postComment };
+const getAllComments = async (req, res) => {
+  const comment = await Comment.find()
+    .select("_id authEmail commentContent blogId")
+    .exec()
+    .then((docs) => {
+      const response = {
+        count: docs.length,
+        comments: docs.map((doc) => {
+          return {
+            id: doc._id,
+            authEmail: doc.authEmail,
+            commentContent: doc.commentContent,
+            blogId: doc.blogId,
+          };
+        }),
+      };
+      res.status(200).json(response);
+      console.log(response);
+    });
+};
+
+module.exports = { postComment, getAllComments };
