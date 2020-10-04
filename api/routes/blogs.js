@@ -15,12 +15,7 @@ const CommentController = require("../controllers/commentController");
 router.get("/", BlogController.retrieve);
 router.get("/:blogId", BlogController.retrieveSingle);
 router.post("/", checkAuth, multerConfig, BlogController.create);
-router.patch(
-  "/:blogId",
-  checkAuth,
-  upload.single("image"),
-  BlogController.update
-);
+router.patch("/:blogId", checkAuth, multerConfig, BlogController.update);
 router.delete("/:blogId", checkAuth, BlogController.remove);
 
 module.exports = router;
