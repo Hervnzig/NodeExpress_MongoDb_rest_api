@@ -1,6 +1,6 @@
 const app = require("./middlewares/app");
 const mongoose = require("mongoose");
-const { MONGO_URL } = require("./config");
+const { MONGO_URL, MONGO_URL_TEST } = require("./config");
 // const http = require("http");
 
 mongoose
@@ -15,6 +15,19 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+// mongoose
+//   .connect(MONGO_URL_TEST, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false,
+//   })
+//   .then(() => {
+//     console.log("Connected to db test");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 // ### Setting up server
 const Port = process.env.PORT || 5000;

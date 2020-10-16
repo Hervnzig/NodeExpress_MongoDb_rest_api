@@ -28,35 +28,6 @@ const retrieve = async (req, res, next) => {
 };
 const retrieveSingle = async (req, res, next) => {
   const id = req.params.blogId;
-  // const blog = Blog()
-  // let blog = await Blog.findById(id)
-  // .exec()
-  // .then((doc) => {
-  //   if (doc) {
-  //     const response1 = {
-  //       the_blog: (doc = {
-  //         id: doc._id,
-  //         title: doc.title,
-  //         author: doc.author,
-  //         content: doc.content,
-  //         date: doc.date,
-  //         image: doc.image,
-  //       }),
-
-  //         comments: [],
-  //       };
-  //       res.status(200).json(response1);
-  //     } else {
-  //       res
-  //         .status(404)
-  //         .json({ message: `No valid entry found for id= ${id} ` });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     // console.log(err);
-  //     res.status(500).json({ error: err.message });
-  //   });
-
   try {
     let blog_w_comments = {};
     blog_w_comments.blog = await Blog.find({ _id: id });
