@@ -23,7 +23,7 @@ const userSignUp = async (userDetails, role, res) => {
       });
     }
 
-    hashedPassword = await bcrypt.hash(userDetails.password, 12);
+    hashedPassword = await bcrypt.hash(userDetails.password, 10);
 
     const newUser = new User({
       ...userDetails,
@@ -41,7 +41,7 @@ const userSignUp = async (userDetails, role, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Unable to create user",
-      error: error,
+      error: error.message,
     });
   }
 };

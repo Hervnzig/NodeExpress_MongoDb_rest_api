@@ -3,5 +3,5 @@ const router = express.Router();
 const CommentController = require("../controllers/commentController");
 
 router.post("/:blogId/comments", CommentController.postComment);
-router.get("/user/login-admin/comments", CommentController.getAllComments);
+router.get("/user/admin/comments", CommentController.getAllComments);
 module.exports = router;

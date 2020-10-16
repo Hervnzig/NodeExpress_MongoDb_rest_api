@@ -28,39 +28,14 @@ const retrieve = async (req, res, next) => {
 };
 const retrieveSingle = async (req, res, next) => {
   const id = req.params.blogId;
-  // let blog = await Blog.findById(id)
-  //   .exec()
-  //   .then((doc) => {
-  //     if (doc) {
-  //       const response1 = {
-  //         the_blog: (doc = {
-  //           id: doc._id,
-  //           title: doc.title,
-  //           author: doc.author,
-  //           content: doc.content,
-  //           date: doc.date,
-  //           image: doc.image,
-  //         }),
-
-  //         comments: [],
-  //       };
-  //       res.status(200).json(response1);
-  //     } else {
-  //       res
-  //         .status(404)
-  //         .json({ message: `No valid entry found for id= ${id} ` });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     // console.log(err);
-  //     res.status(500).json({ error: err.message });
-  //   });
-
-  let blog_w_comments = {};
-  blog_w_comments.blog = await Blog.find({ _id: req.params.blogId });
-  blog_w_comments.comments = await Comments.find({ blogId: req.params.blogId });
-
-  res.status(200).json(blog_w_comments);
+  try {
+    let blog_w_comments = {};
+    blog_w_comments.blog = await Blog.find({ _id: id });
+    blog_w_comments.comments = await Comments.find({ blogId: id });
+    res.status(200).json(blog_w_comments);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 const create = async (req, res, next) => {
@@ -106,19 +81,19 @@ const remove = async (req, res, next) => {
     });
 };
 
-const update = (req, res, next) => {
+const update = async (req, res, next) => {
   const blogId = req.params.blogId;
+  const updatedResult = await cloud.uploads(req.files[0].path);
 
   let updatedBlog = Blog.findByIdAndUpdate(blogId, {
     title: req.body.title,
     author: req.body.author,
     content: req.body.content,
-    image: req.file.filename,
+    image: updatedResult.url,
   });
-  if (req.file) {
-    updatedBlog.image = req.file.path;
-  }
+
   updatedBlog
+    .exec()
     .then((result) => {
       res.status(200).json({
         message: `=== Blog with id ${blogId} updated successfully ===`,
@@ -132,33 +107,6 @@ const update = (req, res, next) => {
     });
   console.log(updatedBlog);
 };
-
-// const retrieveSingleComment = async (req, res, next) => {
-//   const comments = [];
-//   const id = req.params.blogId;
-//   let commentArray = await Comments.findById(id);
-
-//   let blog = await Blog.findById(id)
-//     .exec()
-//     .then((doc) => {
-//       // console.log("### From database: ", doc);
-//       if (doc) {
-//         console.log(commentArray);
-//         res.status(200).json({
-//           blogs: doc,
-//           comments: commentArray,
-//         });
-//       } else {
-//         res
-//           .status(404)
-//           .json({ message: `No valid entry found for id= ${id} ` });
-//       }
-//     })
-//     .catch((err) => {
-//       // console.log(err);
-//       res.status(500).json({ error: err });
-//     });
-// };
 
 module.exports = {
   create,

@@ -11,9 +11,13 @@ app.use(morgan("dev"));
 
 // === ROUTES ===
 app.get("/", (req, res, next) => {
-  res.send(
-    "Welcome to my login add /user/login-user, for signup add a user/register-user/, blogs for blogs add /blogs"
-  );
+  res.status(200).json({
+    message:
+      "Welcome to my login add /user/login-user, for signup add a user/register-user/",
+  });
+  // .send(
+  //   "Welcome to my login add /user/login-user, for signup add a user/register-user/, blogs for blogs add /blogs"
+  // );
 });
 
 app.use("/user", userRoutes);
