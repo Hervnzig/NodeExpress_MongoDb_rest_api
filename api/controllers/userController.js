@@ -104,9 +104,9 @@ const userLogin = async (userCredentials, role, res) => {
   }
 };
 
-const retriveUsers = async (req, res, next) => {
-  await res.send("Hi");
-};
+// const retriveUsers = async (req, res, next) => {
+//   await res.send("Hi");
+// };
 
 const removeUser = async (req, res, next) => {
   const userId = req.params.userId;
@@ -137,4 +137,4 @@ const validateEmail = async (email) => {
   return user ? false : true;
 };
 
-module.exports = { userSignUp, userLogin, retriveUsers, removeUser };
+module.exports = { userSignUp, userLogin, removeUser };

@@ -6,7 +6,6 @@
   "scripts": {
     "devStart": "nodemon server.js",
     "test": "mocha --timeout 15000",
-    "bat": "pre.bat",
     "coverage": "npm run && nyc --reporter=html --reporter=text npm test"
   },
   "keywords": [],

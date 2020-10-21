@@ -15,16 +15,22 @@ app.get("/", (req, res, next) => {
     message:
       "Welcome to my login add /user/login-user, for signup add a user/register-user/",
   });
-  // .send(
-  //   "Welcome to my login add /user/login-user, for signup add a user/register-user/, blogs for blogs add /blogs"
-  // );
 });
 
 app.use("/user", userRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/blogs", commentRoutes);
 
-app.use("/uploads", express.static("uploads"));
+// Swagger
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const SwaggerOptions = require("../swagger/swagger.json");
+
+const swaggerDocument = swaggerJsDoc(SwaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// app.use("/uploads", express.static("uploads"));
 
 // =======
 app.use((req, res, next) => {

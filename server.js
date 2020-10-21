@@ -16,19 +16,6 @@ mongoose
     console.log(err);
   });
 
-// mongoose
-//   .connect(MONGO_URL_TEST, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//   })
-//   .then(() => {
-//     console.log("Connected to db test");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
 // ### Setting up server
 const Port = process.env.PORT || 5000;
 

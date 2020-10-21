@@ -12,7 +12,29 @@ const BlogController = require("../controllers/blogController");
 const CommentController = require("../controllers/commentController");
 
 // Handle incoming requests to /blogs
+
+/**
+ * @swagger
+ * /blogs:
+ *   get:
+ *     description: Get all blogs
+ *     responses:
+ *       200:
+ *         description: Success
+ *
+ */
 router.get("/", BlogController.retrieve);
+
+/**
+ * @swagger
+ * /blogs/:id:
+ *   get:
+ *     description: Get single blog
+ *     responses:
+ *       200:
+ *         description: Success
+ *
+ */
 router.get("/:blogId", BlogController.retrieveSingle);
 router.post("/", checkAuth, multerConfig, BlogController.create);
 router.patch("/:blogId", checkAuth, multerConfig, BlogController.update);

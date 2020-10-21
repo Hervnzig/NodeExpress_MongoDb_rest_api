@@ -1,0 +1,13 @@
+{
+  "swaggerDefinition": {
+    "info": {
+      "title": "Blogs API",
+      "version": "1.0.0",
+      "description": "Blogs API documentation",
+      "contact": {
+        "name": "Herve Musangwa"
+      }
+    }
+  },
+  "apis": ["app.js", "./api/routes/*.js"]
+}
