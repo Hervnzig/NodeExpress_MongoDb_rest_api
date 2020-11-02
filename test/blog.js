@@ -10,6 +10,8 @@ chai.should();
 chai.use(chaiHttp);
 
 describe("Blogs API", () => {
+  const jwt_token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY5NjYzZWMyOWZhMzEwMDA0NTUzMGU4Iiwicm9sZSI6ImFkbWluIiwidXNlcm5hbWUiOiJoZXJ2ZV9hZG1pbiIsImVtYWlsIjoiYWRtaW5IZXJ2ZUBnbWFpbC5jb20iLCJpYXQiOjE2MDM2OTE1MTgsImV4cCI6MTYwNDI5NjMxOH0.YEB6RMtWuGDVViyU8xIH8C-iP42bXO3baBjfD3xcFv8";
   /**
    * Test the GET route
    */
@@ -93,28 +95,30 @@ describe("Blogs API", () => {
    * Test the PATCH route
    */
 
-  // describe("PATCH blogs/:blogID", () => {
-  //   it("it should UPDATE a blog given by the id", async (done) => {
-  //     const id = "5f77501df933490004892b7f";
-  //     const token =
-  //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY4OTQzNmM0M2Y1YzUxMDk0MTZiYjY3Iiwicm9sZSI6ImFkbWluIiwidXNlcm5hbWUiOiJ0ZXN0ZXJfMSIsImVtYWlsIjoidG9kYXl0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTYwMjgzMTIzNywiZXhwIjoxNjAzNDM2MDM3fQ.LJgxzzMbP9dxvYnON3u8gbQNkj_wEdn251IJoVQmrYg";
-  //     const single_blog = {
-  //       title: "Mocha chai",
-  //       image: "updatedResult.url",
-  //     };
-  //     chai
-  //       .request(server)
-  //       .patch("/blogs/" + id)
-  //       .set("Authorization", `Bearer ${token}`)
-  //       .send(single_blog)
-  //       .end((error, res) => {
-  //         res.should.have.status(200);
-  //         res.body.should.be.a("object");
+  describe("PATCH/blogs/:blogID", () => {
+    const blogID = "5f7741cc71df934ce4c7bcd0";
+    const newArticle = {
+      title: "Messi or Ronaldihno",
+      author: "Football_addict",
+      content:
+        "Leo Messi might have the most success with Barcelona but Ronaldhino has been the one to lay foundation.",
+      image: "images/encryption.png",
+    };
 
-  //         done();
-  //       });
-  //   });
-  // });
+    it("it should UPDATE a blog given by the id", async (done) => {
+      chai
+        .request(server)
+        .patch("/blogs/" + blogID)
+        .set("Authorization", `Bearer ${jwt_token}`)
+        .send(newArticle)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+
+          done();
+        });
+    });
+  });
 
   /**
    * Test the DELETE route
@@ -122,19 +126,14 @@ describe("Blogs API", () => {
 
   describe("DELETE /blogs/:blogID", () => {
     it("it should DELETE a blog given the id", (done) => {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY4OTQzNmM0M2Y1YzUxMDk0MTZiYjY3Iiwicm9sZSI6ImFkbWluIiwidXNlcm5hbWUiOiJ0ZXN0ZXJfMSIsImVtYWlsIjoidG9kYXl0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTYwMjgzMTIzNywiZXhwIjoxNjAzNDM2MDM3fQ.LJgxzzMbP9dxvYnON3u8gbQNkj_wEdn251IJoVQmrYg";
       const blog_id = "5f77501df933490004892b7f";
       chai
         .request(server)
         .delete("/blogs/" + blog_id)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${jwt_token}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("object");
-          // res.body.should.have
-          //   .property("message")
-          //   .to.be.eql("Blog successfully deleted!");
           done();
         });
     });

@@ -36,6 +36,38 @@ router.get("/", BlogController.retrieve);
  *
  */
 router.get("/:blogId", BlogController.retrieveSingle);
+
+/**
+ * @swagger
+ * /blogs:
+ *  post:
+ *    description: Use to add a blog in the DB
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: Add blog
+ *        description: Add food in DB.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - foodName
+ *            - quantity
+ *          properties:
+ *            foodName:
+ *              type: string
+ *            quantity:
+ *              type: string
+ *            createTillNow:
+ *              type: string
+ *            predicted:
+ *              type: string
+ *            status:
+ *              type: string
+ *    responses:
+ *      '200':
+ *        description: Food added successfully.
+ */
 router.post("/", checkAuth, multerConfig, BlogController.create);
 router.patch("/:blogId", checkAuth, multerConfig, BlogController.update);
 router.delete("/:blogId", checkAuth, BlogController.remove);
